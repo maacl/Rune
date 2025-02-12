@@ -1,8 +1,8 @@
-iroh-tauri
+Blackbird
 ==========
-
+Chat client using iroh (Gossip protocol), Tauri and htmx.
 
 TO-DO
 =====
 
-Spinner while establishing connection.
+[ ] deactivate username box until connected.
