@@ -1,0 +1,45 @@
+{
+  "name": "iroh-tauri",
+  "version": "0.0.1",
+  "author": "Martin Clausen",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "dev:tauri": "tauri dev",
+    "build:tauri": "tauri build",
+    "preview": "vite preview",
+    "prettier": "prettier src -c",
+    "prettier:fix": "prettier src -w",
+    "eslint": "eslint src",
+    "eslint:fix": "eslint src --fix",
+    "tauri": "tauri"
+  },
+  "license": "Proprietary",
+  "devDependencies": {
+    "@eslint/js": "9.19.0",
+    "@ianvs/prettier-plugin-sort-imports": "4.4.1",
+    "@types/node": "22.12.0",
+    "autoprefixer": "10.4.20",
+    "daisyui": "5.0.0-beta.6",
+    "eslint": "9.19.0",
+    "eslint-config-prettier": "10.0.1",
+    "lightningcss": "1.29.1",
+    "postcss": "8.5.1",
+    "prettier": "3.4.2",
+    "prettier-eslint-cli": "8.0.1",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "tailwindcss": "4.0.2",
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.22.0",
+    "vite": "6.0.11",
+    "vite-tsconfig-paths": "5.1.4"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.0.2",
+    "@tauri-apps/api": "2.2.0",
+    "@tauri-apps/cli": "2.2.7",
+    "@tauri-apps/plugin-clipboard-manager": "~2",
+    "htmx.org": "^1.9.12"
+  }
+}

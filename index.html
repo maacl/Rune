@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="htmx-config" content='{"selfRequestsOnly":false}' />
+  <script src="/src/index.ts" type="module"></script>
+  <title>Tauri + Tailwind App</title>
+</head>
+
+<body hx-ext="tauri">
+  <div hx-ext="debug">
+    <div class="flex-col">
+      <div class="grid grid-cols-6 gap-4">
+        <div class="col-span-3 ...">
+          <form tauri-invoke="join" hx-swap="outerHTML">
+            <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+              <legend class="fieldset-legend">Open Topic</legend>
+
+              <label class="fieldset-label">Username</label>
+              <input type="text" name="username" class="input" placeholder="Username" />
+
+              <button type="submit" class="btn btn-neutral mt-4">Create Topic</button>
+
+              <div tauri-listen="connected">
+                <span class="loading loading-infinity loading-xl"></span>
+                Connecting...
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="col-span-3   ...">
+          <form tauri-invoke="send" hx-swap="outerHTML">
+            <fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+              <legend class="fieldset-legend">Chat</legend>
+
+              <label class="fieldset-label">Message</label>
+              <textarea class="textarea" name="msg" placeholder="Message..."></textarea>
+
+              <button type="submit" class="btn btn-neutral mt-4">Send</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+
+      <div class="divider">Chat Below</div>
+
+      <div tauri-listen="message" hx-swap="afterbegin" class="px-20">
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>
