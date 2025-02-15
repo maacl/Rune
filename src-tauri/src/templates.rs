@@ -68,3 +68,14 @@ pub fn connected() -> Markup {
         }
     }
 }
+
+pub fn topic_list(topics: Vec<String>) -> Markup {
+    html! {
+        select."select select-bordered w-full max-w-xs" tauri-invoke="select_topic" hx-swap="outerHTML" {
+            @for topic in &topics {
+                option { (topic) }
+            }
+
+        }
+    }
+}

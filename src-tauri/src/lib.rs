@@ -5,8 +5,10 @@ mod templates;
 mod ticket;
 mod topic;
 
+use core::fmt;
 use std::collections::HashMap;
 use std::path::PathBuf;
+use std::{thread, time::Duration};
 
 use anyhow::{Context, Result};
 use futures_lite::StreamExt;
@@ -22,9 +24,20 @@ use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use iroh_local::Iroh;
 use message::Message;
-use templates::{connected, login_form, message, send_form};
+use templates::{connected, login_form, message, send_form, topic_list};
 use ticket::Ticket;
 
+#[tauri::command]
+
+async fn select_topic(
+    app_handle: tauri::AppHandle,
+    state: tauri::State<'_, Mutex<AppState>>,
+    topic: String,
+) -> Result<String, String> {
+    println!("> topic selected: {topic}");
+
+    Ok(topic_list(vec!["1".into(), "2".into()]).into())
+}
 #[tauri::command]
 async fn send(
     app_handle: tauri::AppHandle,
@@ -72,14 +85,17 @@ async fn join(
         Ticket { topic: id, nodes }
     };
     println!("> ticket to join us: {new_ticket}");
-    
-    app_handle.clipboard().write_text(new_ticket.to_string()).unwrap();
+
+    app_handle
+        .clipboard()
+        .write_text(new_ticket.to_string())
+        .unwrap();
 
     println!("> ticket copied to clip board!");
 
     let (sender, receiver) = topic.split();
 
-    tokio::spawn(subscribe_loop(receiver, app_handle));
+    tokio::spawn(subscribe_loop(receiver, app_handle.clone()));
 
     let message = Message::AboutMe {
         from: unlocked_state.iroh.endpoint.node_id(),
@@ -93,6 +109,14 @@ async fn join(
 
     unlocked_state.topics.push(sender);
 
+    let t_list = unlocked_state
+        .topics
+        .iter()
+        .map(|t| format!("{:?}", t))
+        .collect();
+
+    let _ = app_handle.emit("topic_list", topic_list(t_list).into_string());
+
     Ok(login_form(new_ticket.to_string()).into())
 }
 
@@ -105,6 +129,8 @@ async fn setup<R: tauri::Runtime>(
 
     let iroh = Iroh::new(data_root).await?;
     app_handle.manage(Mutex::new(AppState::new(iroh, Vec::new())));
+
+    thread::sleep(Duration::from_millis(2000));
 
     let _ = app_handle.emit("connected", connected().into_string());
 
