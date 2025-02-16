@@ -24,11 +24,10 @@ use tauri_plugin_clipboard_manager::ClipboardExt;
 
 use iroh_local::Iroh;
 use message::Message;
-use templates::{connected, login_form, message, send_form, topic_list};
+use templates::{connected, login_form, message, new_topic, send_form};
 use ticket::Ticket;
 
 #[tauri::command]
-
 async fn select_topic(
     app_handle: tauri::AppHandle,
     state: tauri::State<'_, Mutex<AppState>>,
@@ -36,7 +35,7 @@ async fn select_topic(
 ) -> Result<String, String> {
     println!("> topic selected: {topic}");
 
-    Ok(topic_list(vec!["1".into(), "2".into()]).into())
+    Ok("Topic selected".into())
 }
 #[tauri::command]
 async fn send(
@@ -109,13 +108,9 @@ async fn join(
 
     unlocked_state.topics.push(sender);
 
-    let t_list = unlocked_state
-        .topics
-        .iter()
-        .map(|t| format!("{:?}", t))
-        .collect();
+    let t: &GossipSender = unlocked_state.topics.last().unwrap();
 
-    let _ = app_handle.emit("topic_list", topic_list(t_list).into_string());
+    let _ = app_handle.emit("topiclist", new_topic(format!("{:?}", t)).into_string());
 
     Ok(login_form(new_ticket.to_string()).into())
 }

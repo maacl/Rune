@@ -4,15 +4,12 @@ pub fn login_form(ticket: String) -> Markup {
     html! {
         div."grid grid-cols-6 gap-4" {
             div."col-span-3 ..." {
-               form tauri-invoke="save" hx-swap="outerHTML" {
+               form tauri-invoke="join" hx-swap="outerHTML" {
                     fieldset."fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box" {
 
                         legend."fieldset-legend" { "Login" }
                         label."fieldset-label" { "Username" }
                         input.input type="text" name="username" placeholder="Username" { "" }
-
-                        label."fieldset-label" { "Ticket" }
-                        textarea.textarea name="ticket" placeholder="Ticket" { (ticket) }
 
                         button."btn btn-neutral mt-4" type="submit" { "Login" }
                     }
@@ -69,13 +66,8 @@ pub fn connected() -> Markup {
     }
 }
 
-pub fn topic_list(topics: Vec<String>) -> Markup {
+pub fn new_topic(topic: String) -> Markup {
     html! {
-        select."select select-bordered w-full max-w-xs" tauri-invoke="select_topic" hx-swap="outerHTML" {
-            @for topic in &topics {
-                option { (topic) }
-            }
-
-        }
+        option {(topic)}
     }
 }

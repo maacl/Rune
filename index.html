@@ -45,15 +45,11 @@
         </div>
 
         <div class="col-span-3 ...">
-          <label class="form-control w-full max-w-xs">
-            <div class="label">
-              <span class="label-text">Topics</span>
-            </div>
 
-            <select class="select select-bordered w-full max-w-xs" tauri-listen="topic_list" tauri-invoke="select_topic"
-              hx-swap="outerHTML">
-            </select>
-          </label>
+          <select class="select select-bordered w-full max-w-xs" name="topic" id="topiclist" tauri-listen="topiclist"
+            hx-swap="afterbegin">
+            <option>No topics available</option>
+          </select>
         </div>
 
       </div>
