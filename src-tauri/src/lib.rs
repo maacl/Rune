@@ -12,6 +12,7 @@ use std::{thread, time::Duration};
 
 use anyhow::{Context, Result};
 use futures_lite::StreamExt;
+use petname::petname;
 use tokio::sync::Mutex;
 
 use iroh_gossip::{
@@ -110,7 +111,7 @@ async fn join(
 
     let t: &GossipSender = unlocked_state.topics.last().unwrap();
 
-    let _ = app_handle.emit("topiclist", new_topic(format!("{:?}", t)).into_string());
+    let _ = app_handle.emit("new_topic", new_topic(format!("{:?}", t)).into_string());
 
     Ok(login_form(new_ticket.to_string()).into())
 }
