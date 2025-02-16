@@ -28,6 +28,25 @@ use message::Message;
 use templates::{connected, login_form, message, new_topic, send_form};
 use ticket::Ticket;
 
+struct AppState {
+    iroh: Iroh,
+    topics: HashMap<String, GossipSender>,
+    active_topic: String,
+}
+impl AppState {
+    fn new(iroh: Iroh, topics: HashMap<String, GossipSender>, active_topic: String) -> Self {
+        AppState {
+            iroh,
+            topics,
+            active_topic,
+        }
+    }
+
+    fn iroh(&self) -> &Iroh {
+        &self.iroh
+    }
+}
+
 #[tauri::command]
 async fn select_topic(
     app_handle: tauri::AppHandle,
@@ -53,7 +72,10 @@ async fn send(
 
     let _ = app_handle.emit("message", message("me".into(), msg).into_string());
 
-    let _ = unlocked_state.topics[0]
+    let _ = unlocked_state
+        .topics
+        .get(&unlocked_state.active_topic)
+        .expect("Topic not found.")
         .broadcast(m.to_vec().into())
         .await
         .map_err(|_| "Failed to send message".to_string());
@@ -107,11 +129,19 @@ async fn join(
         .await
         .map_err(|_| "Failed to send message".to_string());
 
-    unlocked_state.topics.push(sender);
+    let topic_name = petname(7, ":").expect("Uanble to create topic name.");
 
-    let t: &GossipSender = unlocked_state.topics.last().unwrap();
+    unlocked_state.topics.insert(topic_name.clone(), sender);
+    unlocked_state.active_topic = topic_name.clone();
 
-    let _ = app_handle.emit("new_topic", new_topic(format!("{:?}", t)).into_string());
+    //let t: &GossipSender = unlocked_state.topics.last().unwrap();
+
+    let _ = app_handle.emit(
+        "new_topic",
+        new_topic(format!("{:?}", topic_name.clone())).into_string(),
+    );
+
+    let _ = app_handle.emit("connected", connected().into_string());
 
     Ok(login_form(new_ticket.to_string()).into())
 }
@@ -124,7 +154,7 @@ async fn setup<R: tauri::Runtime>(
     let data_root = app_data_dir.join("iroh_data");
 
     let iroh = Iroh::new(data_root).await?;
-    app_handle.manage(Mutex::new(AppState::new(iroh, Vec::new())));
+    app_handle.manage(Mutex::new(AppState::new(iroh, HashMap::new(), "".into())));
 
     thread::sleep(Duration::from_millis(2000));
 
@@ -133,20 +163,6 @@ async fn setup<R: tauri::Runtime>(
     println!("Ready!!");
 
     Ok(())
-}
-
-struct AppState {
-    iroh: Iroh,
-    topics: Vec<GossipSender>,
-}
-impl AppState {
-    fn new(iroh: Iroh, topics: Vec<GossipSender>) -> Self {
-        AppState { iroh, topics }
-    }
-
-    fn iroh(&self) -> &Iroh {
-        &self.iroh
-    }
 }
 
 pub fn run() {

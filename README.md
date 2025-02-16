@@ -6,4 +6,5 @@ TO-DO
 =====
 
 [ ] Deactivate username box until connected.
-[ ] Refactor topic list to topic map to have readable topic titles.
+[ ] On insert check if topic name exists and create a new one if it does.
+[ ] Fix connecting indicator.

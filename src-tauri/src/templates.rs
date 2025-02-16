@@ -11,7 +11,7 @@ pub fn login_form(ticket: String) -> Markup {
                         label."fieldset-label" { "Username" }
                         input.input type="text" name="username" placeholder="Username" { "" }
 
-                        button."btn btn-neutral mt-4" type="submit" { "Login" }
+                        button."btn btn-neutral mt-4" type="submit" { "Create Tpoic" }
                     }
                 }
             }
