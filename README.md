@@ -1,5 +1,5 @@
-Blackbird
-==========
+ᛃ Rune ᛃ
+========
 Chat client using iroh (Gossip protocol), Tauri and htmx.
 
 TO-DO
@@ -12,10 +12,10 @@ TO-DO
 TO DEVELOP
 ==========
 
-pnmp install
-pnmp tauri dev
+- pnmp install
+- pnmp tauri dev
 
 TO BUILD
 ========
 
-
+- pnpm build --debug or pnpm build --release

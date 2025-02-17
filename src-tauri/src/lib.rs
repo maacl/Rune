@@ -5,7 +5,6 @@ mod templates;
 mod ticket;
 mod topic;
 
-use core::fmt;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::{thread, time::Duration};
