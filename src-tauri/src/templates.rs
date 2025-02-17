@@ -12,6 +12,8 @@ pub fn login_form(ticket: String) -> Markup {
                         input.input type="text" name="username" placeholder="Username" { "" }
 
                         button."btn btn-neutral mt-4" type="submit" { "Create Tpoic" }
+
+                        (connected())
                     }
                 }
             }
