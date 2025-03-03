@@ -4,12 +4,10 @@ pub fn login_form(ticket: String) -> Markup {
     html! {
         div."grid grid-cols-6 gap-4" {
             div."col-span-3 ..." {
-               form tauri-invoke="join" hx-swap="outerHTML" {
-                    fieldset."fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box" {
-                        legend."fieldset-legend" { "Login" }
-                        label."fieldset-label" { "Username" }
-                        input.input type="text" name="username" placeholder="Username" { "" }
-                        button."btn btn-neutral mt-4" type="submit" { "Create Tpoic" }
+               form."w-50" tauri-invoke="join" hx-swap="outerHTML" {
+                    fieldset."fieldset bg-base-200 border border-base-300 p-2 rounded-box" {
+                        input."input input-sm w-50" type="text" name="username" placeholder="Username" { "" }
+                        button."btn btn-neutral btn-outline btn-primary btn-sm w-50" type="submit" { "Create Tpoic" }
                         (connected())
                     }
                 }
@@ -38,14 +36,10 @@ pub fn message(sender: String, message: String) -> Markup {
 
 pub fn send_form() -> Markup {
     html! {
-        div."col-span-3   ..." {
+        div {
             form tauri-invoke="send" hx-swap="outerHTML" {
-                legend."fieldset-legend" { "Chat"}
-                fieldset."fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box" {
-                    label."fieldset-label" {"Message"}
-                    textarea."textarea" name="msg" placeholder="Sent..." {}
-                    button."btn btn-neutral mt-4" type="submit" {"Send"}
-                }
+                    textarea."textarea textarea w-9/10 p-4" name="msg" placeholder="Sent..." {}
+                    button."btn btn-neutral p-4 mt-4 float-right" type="submit" {"Send"}
             }
 
         }
@@ -65,6 +59,6 @@ pub fn connected() -> Markup {
 
 pub fn new_topic(topic: String) -> Markup {
     html! {
-        option {(topic)}
+        li {a."truncate" { span."truncate" {(topic)}}}
     }
 }

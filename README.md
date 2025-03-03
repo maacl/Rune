@@ -12,10 +12,12 @@ TO-DO
 TO DEVELOP
 ==========
 
-- pnmp install
-- pnmp tauri dev
+- pnpm install
+- pnpm tauri dev
 
 TO BUILD
 ========
 
-- pnpm build --debug or pnpm build --release
+- pnpm build --debug 
+  or
+- or pnpm build --release
