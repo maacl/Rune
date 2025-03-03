@@ -11,51 +11,54 @@
 
 <body hx-ext="tauri">
   <div hx-ext="debug">
+
     <div class="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+
       <div class="drawer-content flex flex-col p-4 ">
-   
         <form tauri-invoke="send" hx-swap="outerHTML" class="w-9/10">
           <label for="my-drawer-2" class="w-1/10 drawer-button lg:hidden float-left">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="size-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
           </label>
           <div>
-          <textarea class="textarea w-9/10 p-4" name="msg" placeholder="Message..."></textarea>
-          <button type="submit" class="btn btn-neutral btn-sm p-4 mt-4 float-right">Send</button>
+            <textarea class="textarea w-9/10 p-4" name="msg" placeholder="Message..."></textarea>
+            <button type="submit" class="btn btn-neutral btn-sm p-4 mt-4 float-right">Send</button>
         </form>
-        </div> 
-        <div class="">
-          <div tauri-listen="message" hx-swap="afterbegin" class="px-20">
-          </div>
-        </div>
-       
       </div>
-      <div class="drawer-side">
-        <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
-        <ul class="menu bg-base-200 text-base-content min-h-full w-60 p-4" name="topic" id="topiclist"
-          tauri-listen="new_topic" hx-swap="beforeend">
-          <!-- Sidebar -->
-          <div p-8 w-50>
-            <form class="w-50" tauri-invoke="join" hx-swap="outerHTML">
-              <fieldset class="fieldset bg-base-200 border border-base-300 p-2 rounded-box">
-
-                <input type="text" name="username" class="input input-sm w-50" placeholder="Username" />
-
-                <button type="submit" class="btn btn-neutral btn-outline btn-primary btn-sm w-50">Create Topic</button>
-
-                <div tauri-listen="connected">
-                  <span class="loading loading-infinity loading-xm"></span>
-                  Connecting...
-                </div>
-              </fieldset>
-            </form>
-          </div>
-          <div class="divider w-50">Topics</div>
-        </ul>
+      <div class="">
+        <div tauri-listen="message" hx-swap="afterbegin" class="px-20">
+        </div>
       </div>
     </div>
+
+    <div class="drawer-side">
+      <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+      <ul class="menu bg-base-200 text-base-content min-h-full w-60 p-4" name="topic" id="topiclist"
+        tauri-listen="new_topic" hx-swap="beforeend">
+        <!-- Sidebar -->
+        <div p-8 w-50>
+          <form class="w-50" tauri-invoke="join" hx-swap="outerHTML">
+            <fieldset class="fieldset bg-base-200 border border-base-300 p-2 rounded-box">
+
+              <input type="text" name="username" class="input input-sm w-50" placeholder="Username" />
+              <input type="text" name="ticket" class="input input-sm w-50" placeholder="Ticket" />
+
+              <button type="submit" class="btn btn-neutral btn-outline btn-primary btn-sm w-50">Create/Join Topic</button>
+
+              <div tauri-listen="connected">
+                <span class="loading loading-infinity loading-xm"></span>
+                Connecting...
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="divider w-50">Topics</div>
+      </ul>
+    </div>
+
   </div>
 </body>
 

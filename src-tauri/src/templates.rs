@@ -1,13 +1,14 @@
 use maud::{html, Markup};
 
-pub fn login_form(ticket: String) -> Markup {
+pub fn login_form() -> Markup {
     html! {
         div."grid grid-cols-6 gap-4" {
             div."col-span-3 ..." {
                form."w-50" tauri-invoke="join" hx-swap="outerHTML" {
                     fieldset."fieldset bg-base-200 border border-base-300 p-2 rounded-box" {
                         input."input input-sm w-50" type="text" name="username" placeholder="Username" { "" }
-                        button."btn btn-neutral btn-outline btn-primary btn-sm w-50" type="submit" { "Create Tpoic" }
+                        input."input input-sm w-50" type="text" name="ticket" placeholder="Ticket" { "" }
+                        button."btn btn-neutral btn-outline btn-primary btn-sm w-50" type="submit" { "Create/Join Topic" }
                         (connected())
                     }
                 }
@@ -38,8 +39,13 @@ pub fn send_form() -> Markup {
     html! {
         div {
             form tauri-invoke="send" hx-swap="outerHTML" {
-                    textarea."textarea textarea w-9/10 p-4" name="msg" placeholder="Sent..." {}
-                    button."btn btn-neutral p-4 mt-4 float-right" type="submit" {"Send"}
+                label."w-1/10 drawer-button lg:hidden float-left" for="my-drawer-2" {
+                svg."size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" {
+                path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" {}
+                }
+                }
+                textarea."textarea textarea w-9/10 p-4" name="msg" placeholder="Sent..." {}
+                button."btn btn-neutral p-4 mt-4 float-right" type="submit" {"Send"}
             }
 
         }
@@ -59,6 +65,6 @@ pub fn connected() -> Markup {
 
 pub fn new_topic(topic: String) -> Markup {
     html! {
-        li {a."truncate" { span."truncate" {(topic)}}}
+        li {a { span."truncate" {(topic)}}}
     }
 }

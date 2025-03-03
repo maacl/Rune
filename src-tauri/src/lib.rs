@@ -5,6 +5,7 @@ mod templates;
 mod ticket;
 mod topic;
 
+use std::str::FromStr;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::{thread, time::Duration};
@@ -87,14 +88,15 @@ async fn join(
     app_handle: tauri::AppHandle,
     state: tauri::State<'_, Mutex<AppState>>,
     username: String,
+    ticket: String
 ) -> Result<String, String> {
     println!("Username: {username}");
 
-    let id = TopicId::from_bytes(rand::random());
-    let node_ids = vec![];
     let mut unlocked_state = state.lock().await;
-    let topic = unlocked_state.iroh.gossip.subscribe(id, node_ids).unwrap();
-
+    if ticket.is_empty() {
+    let topic_id = TopicId::from_bytes(rand::random());
+    let node_ids = vec![];
+    let topic = unlocked_state.iroh.gossip.subscribe(topic_id, node_ids).unwrap();
     let new_ticket = {
         let me = unlocked_state
             .iroh
@@ -103,10 +105,9 @@ async fn join(
             .await
             .map_err(|_| "Failed to get node addr.".to_string());
         let nodes = vec![me.unwrap()];
-        Ticket { topic: id, nodes }
+        Ticket { topic: topic_id, nodes }
     };
     println!("> ticket to join us: {new_ticket}");
-
     app_handle
         .clipboard()
         .write_text(new_ticket.to_string())
@@ -135,14 +136,43 @@ async fn join(
 
     //let t: &GossipSender = unlocked_state.topics.last().unwrap();
 
-    let _ = app_handle.emit(
-        "new_topic",
-        new_topic(format!("{:?}", topic_name.clone())).into_string(),
-    );
+    let _ = app_handle.emit("new_topic", new_topic(topic_name).into_string());
 
     let _ = app_handle.emit("connected", connected().into_string());
 
-    Ok(login_form(new_ticket.to_string()).into())
+    Ok(login_form().into_string())
+    } 
+    
+    else 
+    
+    
+    {
+    let Ticket { topic, nodes } = Ticket::from_str(&ticket).expect("Ticket could not be created from string.");
+    let node_ids: Vec<_> = nodes.iter().map(|p| p.node_id).collect();
+
+    for node in nodes.into_iter() {
+        unlocked_state.iroh.endpoint.add_node_addr(node).expect("Cannot add node adr.");
+    }
+
+    let (sender, receiver) = unlocked_state.iroh.gossip.subscribe_and_join(topic, node_ids).await.expect("Could not subscribe and join.").split();
+    println!("> connected!");
+
+    // broadcast our name, if set
+        let message = Message::AboutMe {from:unlocked_state.iroh.endpoint.node_id(),  name: username };
+        sender.broadcast(message.to_vec().into()).await.expect("Could not send message.");
+
+    // subscribe and print loop
+    tokio::spawn(subscribe_loop(receiver, app_handle.clone()));
+
+    unlocked_state.topics.insert(topic.to_string(), sender);
+    unlocked_state.active_topic = topic.to_string().clone();
+
+    let _ = app_handle.clone().emit("new_topic", new_topic(topic.to_string()).into_string());
+
+    let _ = app_handle.emit("connected", connected().into_string());
+
+    Ok(login_form().into_string())
+    }
 }
 
 async fn setup<R: tauri::Runtime>(

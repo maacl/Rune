@@ -36,7 +36,7 @@ impl fmt::Display for Ticket {
 
 // The `FromStr` trait allows us to turn a `str` into
 // a `Ticket`
-impl FromStr for Ticket {
+ impl FromStr for Ticket {
     type Err = anyhow::Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let bytes = data_encoding::BASE32_NOPAD.decode(s.to_ascii_uppercase().as_bytes())?;
