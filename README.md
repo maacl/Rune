@@ -18,6 +18,4 @@ TO DEVELOP
 TO BUILD
 ========
 
-- pnpm build --debug 
-  or
-- or pnpm build --release
+- pnpm tauri build

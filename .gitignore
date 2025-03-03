@@ -3,3 +3,4 @@
 src-tauri/target/
 WixTools
 node_modules
+dist
