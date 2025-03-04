@@ -3,6 +3,28 @@
 version = 4
 
 [[package]]
+name = "Rune"
+version = "2.0.0"
+dependencies = [
+ "anyhow",
+ "data-encoding",
+ "futures-lite",
+ "iroh",
+ "iroh-blobs",
+ "iroh-gossip",
+ "maud",
+ "petname",
+ "rand 0.8.5",
+ "serde",
+ "serde-error",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-clipboard-manager",
+ "tokio",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3102,28 +3124,6 @@ dependencies = [
  "tracing",
  "url",
  "webpki-roots",
-]
-
-[[package]]
-name = "iroh-tauri"
-version = "2.0.0"
-dependencies = [
- "anyhow",
- "data-encoding",
- "futures-lite",
- "iroh",
- "iroh-blobs",
- "iroh-gossip",
- "maud",
- "petname",
- "rand 0.8.5",
- "serde",
- "serde-error",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-clipboard-manager",
- "tokio",
 ]
 
 [[package]]
