@@ -3,7 +3,6 @@ mod iroh_local;
 mod message;
 mod templates;
 mod ticket;
-mod topic;
 
 use std::str::FromStr;
 use std::collections::HashMap;
@@ -41,22 +40,19 @@ impl AppState {
             active_topic,
         }
     }
-
-    fn iroh(&self) -> &Iroh {
-        &self.iroh
-    }
 }
 
 #[tauri::command]
 async fn select_topic(
-    app_handle: tauri::AppHandle,
     state: tauri::State<'_, Mutex<AppState>>,
     topic: String,
 ) -> Result<String, String> {
+    let mut unlocked_state = state.lock().await;
+    unlocked_state.active_topic = topic.clone();
     println!("> topic selected: {topic}");
-
     Ok(new_topic(topic).into_string())
 }
+
 #[tauri::command]
 async fn send(
     app_handle: tauri::AppHandle,
@@ -64,7 +60,6 @@ async fn send(
     msg: String,
 ) -> Result<String, String> {
     let unlocked_state = state.lock().await;
-
     let m = Message::Message {
         from: unlocked_state.iroh.endpoint.node_id(),
         text: msg.clone(),
@@ -134,19 +129,13 @@ async fn join(
     unlocked_state.topics.insert(topic_name.clone(), sender);
     unlocked_state.active_topic = topic_name.clone();
 
-    //let t: &GossipSender = unlocked_state.topics.last().unwrap();
-
     let _ = app_handle.emit("new_topic", new_topic(topic_name).into_string());
 
     let _ = app_handle.emit("connected", connected().into_string());
 
     Ok(login_form().into_string())
-    } 
-    
-    else 
-    
-    
-    {
+    }
+    else {
     let Ticket { topic, nodes } = Ticket::from_str(&ticket).expect("Ticket could not be created from string.");
     let node_ids: Vec<_> = nodes.iter().map(|p| p.node_id).collect();
 
@@ -157,11 +146,9 @@ async fn join(
     let (sender, receiver) = unlocked_state.iroh.gossip.subscribe_and_join(topic, node_ids).await.expect("Could not subscribe and join.").split();
     println!("> connected!");
 
-    // broadcast our name, if set
         let message = Message::AboutMe {from:unlocked_state.iroh.endpoint.node_id(),  name: username };
         sender.broadcast(message.to_vec().into()).await.expect("Could not send message.");
 
-    // subscribe and print loop
     tokio::spawn(subscribe_loop(receiver, app_handle.clone()));
 
     unlocked_state.topics.insert(topic.to_string(), sender);
