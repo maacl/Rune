@@ -65,6 +65,6 @@ pub fn connected() -> Markup {
 
 pub fn new_topic(topic: String) -> Markup {
     html! {
-        li {a { span."truncate" {(topic)}}}
+        li { button."btn btn-ghost w-50 btn-sm" tauri-invoke="select_topic" hx-swap="innerHTML" name="topic" value=(topic) {span."truncate" {(topic)} }}
     }
 }

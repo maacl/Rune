@@ -55,7 +55,7 @@ async fn select_topic(
 ) -> Result<String, String> {
     println!("> topic selected: {topic}");
 
-    Ok("Topic selected".into())
+    Ok(new_topic(topic).into_string())
 }
 #[tauri::command]
 async fn send(
@@ -214,7 +214,7 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![join, send])
+        .invoke_handler(tauri::generate_handler![join, send, select_topic])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
