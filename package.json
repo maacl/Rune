@@ -1,6 +1,6 @@
 {
-  "name": "iroh-tauri",
-  "version": "0.0.1",
+  "name": "rune",
+  "version": "0.1.0",
   "author": "Martin Clausen",
   "type": "module",
   "scripts": {
