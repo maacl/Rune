@@ -230,9 +230,8 @@ async fn subscribe_loop(mut receiver: GossipReceiver, app: AppHandle) -> Result<
                     let name = names
                         .get(&from)
                         .map_or_else(|| from.fmt_short(), String::to_string);
-                    let sender = from.to_string();
 
-                    let payload = message(sender, text.clone()).into_string();
+                    let payload = message(name.clone(), text.clone()).into_string();
 
                     let _ = app.emit("message", payload);
                     println!("{}: {}", name, text);

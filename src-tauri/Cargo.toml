@@ -34,7 +34,8 @@ iroh-gossip = "0.33.0"
 iroh-blobs = { version = "0.33.0", features = ["rpc"] }
 rand = "0.9.0"
 tokio = "1.44.0"
-tauri-plugin-clipboard-manager = "2"
+tauri-plugin-clipboard-manager = "2.2.2"
+chrono = "0.4.40"
 
 [features]
 default = [ "custom-protocol" ]

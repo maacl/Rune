@@ -1,4 +1,6 @@
 use maud::{html, Markup};
+use chrono::prelude::*;
+
 
 pub fn login_form() -> Markup {
     html! {
@@ -18,16 +20,18 @@ pub fn login_form() -> Markup {
 }
 
 pub fn message(sender: String, message: String) -> Markup {
+    let avatar = if sender == "me" {"https://i.pravatar.cc/150?img=3"} else {"https://i.pravatar.cc/150?img=43"};
+    let ht = Local::now().format("%Y-%m-%d %H:%M:%S");
     html! {
         div.@if sender == "me" {"chat chat-start"}  @else {"chat chat-end"} {
             div."chat-image avatar" {
                 div."w-10 rounded-full" {
-                    img alt="Tailwind CSS chat bubble component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" {}
+                    img alt="Tailwind CSS chat bubble component" src=(avatar) {}
                 }
             }
             div."chat-header" {
                 (sender)
-                time."text-xs opacity-50" { "12:45" }
+                time."text-xs opacity-50" { (ht) }
             }
             div."chat-bubble" {(message)}
             div."chat-footer opacity-50" {"delivered"}
