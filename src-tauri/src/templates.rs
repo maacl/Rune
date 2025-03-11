@@ -42,14 +42,14 @@ pub fn message(sender: String, message: String) -> Markup {
 pub fn send_form() -> Markup {
     html! {
         div {
-            form tauri-invoke="send" hx-swap="outerHTML" {
+            form tauri-invoke="send" id="msg_form" hx-swap="outerHTML" hx-on:keyup="if (event.key=='Enter') {document.querySelector('#send_btn').click();}" {
                 label."w-1/10 drawer-button lg:hidden float-left" for="my-drawer-2" {
                 svg."size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" {
                 path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" {}
                 }
                 }
-                textarea."textarea textarea w-9/10 p-4" name="msg" placeholder="Sent..." {}
-                button."btn btn-neutral p-4 mt-4 float-right" type="submit" {"Send"}
+                textarea."textarea textarea w-9/10 p-4" id="msg_box" name="msg" placeholder="Sent..."  {}
+                button."btn btn-neutral p-4 mt-4 float-right" id ="send_btn" type="submit" {"Send"}
             }
 
         }

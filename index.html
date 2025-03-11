@@ -16,7 +16,7 @@
       <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
 
       <div class="drawer-content flex flex-col p-4 ">
-        <form tauri-invoke="send" hx-swap="outerHTML" class="w-9/10">
+        <form id="msg_form" tauri-invoke="send" hx-swap="outerHTML" class="w-9/10" hx-on:keyup="if (event.key=='Enter') {document.querySelector('#send_btn').click();}">
           <label for="my-drawer-2" class="w-1/10 drawer-button lg:hidden float-left">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="size-6">
@@ -24,8 +24,8 @@
             </svg>
           </label>
           <div>
-            <textarea class="textarea w-9/10 p-4" name="msg" placeholder="Message..."></textarea>
-            <button type="submit" class="btn btn-neutral btn-sm p-4 mt-4 float-right">Send</button>
+            <textarea id="msg_box" class="textarea w-9/10 p-4" name="msg" placeholder="Message..."></textarea>
+            <button type="submit" id ="send_btn" class="btn btn-neutral btn-sm p-4 mt-4 float-right">Send</button>
         </form>
       </div>
       <div class="">
